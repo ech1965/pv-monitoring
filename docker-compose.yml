@@ -151,7 +151,7 @@ services:
     volumes:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
       - mosquitto-data:/mosquitto/data
-      - /home/tsos/logs/telegraf:/logs
+      - /home/tsos/logs/telegraf/telegraf.log:/telegraf.log
     networks:
       - monitoring
     labels:
