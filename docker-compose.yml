@@ -53,8 +53,10 @@ services:
     restart: always
     expose:
       - 8086
+      - 8083
     ports:
       - "8086:8086"
+      - "8083:8083"
     volumes:
       - influxdb:/var/lib/influxdb
       - ./influxdb/influxdb-init.iql:/docker-entrypoint-initdb.d/influxdb-init.iql
