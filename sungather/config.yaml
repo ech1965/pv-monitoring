@@ -76,11 +76,6 @@ exports:
         register: total_active_power
         dev_class: power
         state_class: measurement
-      - name: "Load Power"
-        sensor_type: sensor
-        register: load_power
-        dev_class: power
-        state_class: measurement
       - name: "Meter Power"
         sensor_type: sensor
         register: meter_power
