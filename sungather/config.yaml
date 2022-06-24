@@ -12,7 +12,7 @@ inverter:
   use_local_time: True                    # [Optional] Default False, Uses Inventer time, if true it uses PC time when updating timestamps (e.g. PVOutput)
   log_console: INFO                       # [Optional] Default is WARNING, Options: DEBUG, INFO, WARNING, ERROR
   # log_file: INFO                           # [Optional] Default is OFF, Options: OFF, DEBUG, INFO, WARNING, ERROR
-  level: 3                                # [Optional] Set the amount of information to gather
+  level: 2                                # [Optional] Set the amount of information to gather
                                             # 0 = Model and Solar Generation, 
                                             # 1 (default) = Useful data, all required for exports, 
                                             # 2 everything your Inverter supports, 
