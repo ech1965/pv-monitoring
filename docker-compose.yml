@@ -131,13 +131,13 @@ services:
     environment:
       - TZ=Europe/Brussels
     ports:
-      - "8080:8080"
+      - "8082:8082"
     networks:
       - monitoring
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sungather.rule=Host(`sungather.pv-mon.phi8.ovh`)"
-      - "traefik.http.services.sungather.loadbalancer.server.port=8080"
+      - "traefik.http.services.sungather.loadbalancer.server.port=8082"
 
   mosquitto:
     image: eclipse-mosquitto

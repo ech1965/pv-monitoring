@@ -29,7 +29,7 @@ exports:
   # Access at http://localhost:8080 or http://[serverip]:8080
   - name: webserver 
     enabled: True                           # [Optional] Default is False
-    port: 8080                              # [Optional] Default is 8080
+    port: 8082                              # [Optional] Default is 8080
 
   # Output data to InfluxDB
   - name: influxdb
