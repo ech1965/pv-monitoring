@@ -1,7 +1,7 @@
 version: "3"
 services:
   grafana:
-    image: grafana/grafana:9.0.1
+    image: grafana/grafana:latest
     container_name: grafana
     depends_on:
       - renderer
@@ -37,7 +37,7 @@ services:
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
   renderer:
-    image: adejong/grafana-image-renderer-pi:1.0.8-beta2
+    image: grafana/grafana-image-renderer:latest
     container_name: renderer
     restart: unless-stopped
     expose:
