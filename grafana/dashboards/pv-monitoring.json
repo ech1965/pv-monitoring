@@ -43,7 +43,7 @@
       },
       "id": 16,
       "panels": [],
-      "title": "Aktuelle Werte und  Tageswerte",
+      "title": "Valeurs actuelles et valeurs quotidiennes",
       "type": "row"
     },
     {
@@ -169,7 +169,7 @@
           ]
         }
       ],
-      "title": "PV Leistung",
+      "title": "Puissance PV",
       "type": "gauge"
     },
     {
@@ -298,7 +298,7 @@
           ]
         }
       ],
-      "title": "Netz Leistung",
+      "title": "Puissance Réseau",
       "type": "gauge"
     },
     {
@@ -416,7 +416,7 @@
           ]
         }
       ],
-      "title": "Hausverbrauch",
+      "title": "Consommation Maison",
       "type": "gauge"
     },
     {
@@ -545,7 +545,7 @@
           ]
         }
       ],
-      "title": "Speicher Lade-/Entladeleistung",
+      "title": "Puissance Charge/Décharge de la batterie",
       "type": "gauge"
     },
     {
@@ -765,7 +765,7 @@
           ]
         }
       ],
-      "title": "PV Ertrag heute",
+      "title": "Production PV Aujourd'hui",
       "type": "stat"
     },
     {
@@ -856,7 +856,7 @@
           ]
         }
       ],
-      "title": "Netzeinspeisung heute",
+      "title": "Prélèvement Aujourd'hui",
       "type": "stat"
     },
     {
@@ -894,7 +894,7 @@
                 "from": -20,
                 "result": {
                   "index": 2,
-                  "text": "Speicherregelung"
+                  "text": "Contrôle de la batterie"
                 },
                 "to": 20
               },
@@ -1078,7 +1078,7 @@
           ]
         }
       ],
-      "title": "Direktverbrauch heute",
+      "title": "Consommation Directe",
       "transformations": [],
       "type": "stat"
     },
@@ -1170,7 +1170,7 @@
           ]
         }
       ],
-      "title": "Speicher Laden heute",
+      "title": "Charge de Batterie aujourd'hui",
       "type": "stat"
     },
     {
@@ -1223,7 +1223,7 @@
       "pluginVersion": "8.5.6",
       "targets": [
         {
-          "alias": "Entladung",
+          "alias": "Décharge",
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
@@ -1234,7 +1234,7 @@
           "resultFormat": "time_series"
         },
         {
-          "alias": "Ladung",
+          "alias": "Charge",
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
@@ -1246,7 +1246,7 @@
           "resultFormat": "time_series"
         }
       ],
-      "title": "Zeit bis vollst. Ent-/Ladung",
+      "title": "Durée pour terminer la Charge/Décharge",
       "transformations": [],
       "type": "stat"
     },
@@ -1338,7 +1338,7 @@
           ]
         }
       ],
-      "title": "Speicher Entladen heute",
+      "title": "Décharge de la batterie aujourd'hui",
       "type": "stat"
     },
     {
@@ -1429,7 +1429,7 @@
           ]
         }
       ],
-      "title": "Netzbezug heute",
+      "title": "Connexion au Réseau Aujourd'hui",
       "type": "stat"
     },
     {
@@ -1444,7 +1444,7 @@
               "options": {
                 "from": -5,
                 "result": {
-                  "text": "Netzregelung"
+                  "text": "Contrôle de la grille"
                 },
                 "to": 5
               },
@@ -1454,7 +1454,7 @@
               "options": {
                 "from": -9999999999,
                 "result": {
-                  "text": "Entladen"
+                  "text": "Décharger"
                 },
                 "to": -5
               },
@@ -1464,7 +1464,7 @@
               "options": {
                 "from": 5,
                 "result": {
-                  "text": "Laden"
+                  "text": "Charger"
                 },
                 "to": 9999999999
               },
@@ -1647,7 +1647,7 @@
           ]
         }
       ],
-      "title": "Hausverbrauch heute",
+      "title": "Consommation de la maison aujourd'hui",
       "type": "stat"
     },
     {
@@ -1761,7 +1761,7 @@
           ]
         }
       ],
-      "title": "Autarkiegrad",
+      "title": "Dégré d'autonomie",
       "type": "stat"
     },
     {
