@@ -1,5 +1,19 @@
 version: "3"
 services:
+  traefik:
+    image: "traefik:v2.7"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -33,7 +47,7 @@ services:
       - monitoring
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.mydomain.com`)"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.pv-mon.phi8.ovh`)"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
   renderer:
@@ -62,7 +76,7 @@ services:
       - ./influxdb/influxdb-init.iql:/docker-entrypoint-initdb.d/influxdb-init.iql
     environment:
       - INFLUXDB_DB=monitoring
-      - TZ=Europe/Berlin
+      - TZ=Europe/Brussels
     networks:
       - monitoring
     labels:
@@ -76,7 +90,7 @@ services:
       HOST_PROC: /rootfs/proc
       HOST_SYS: /rootfs/sys
       HOST_ETC: /rootfs/etc
-      TZ: Europe/Berlin
+      TZ: Europe/Brussels
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -105,7 +119,7 @@ services:
       - monitoring
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.node-red.rule=Host(`node-red.domain.com`)"
+      - "traefik.http.routers.node-red.rule=Host(`node-red.pvmon.phi8.ovh`)"
       - "traefik.http.services.node-red.loadbalancer.server.port=1880"
 
   sungather:
@@ -115,14 +129,14 @@ services:
     volumes:
       - ./sungather/config.yaml:/config/config.yaml
     environment:
-      - TZ=Europe/Berlin
+      - TZ=Europe/Brussels
     ports:
       - "8080:8080"
     networks:
       - monitoring
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sungather.rule=Host(`sungather.domain.com`)"
+      - "traefik.http.routers.sungather.rule=Host(`sungather.pv-mon.phi8.ovh`)"
       - "traefik.http.services.sungather.loadbalancer.server.port=8080"
 
   mosquitto:
@@ -139,7 +153,7 @@ services:
       - monitoring
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mosquitto.rule=Host(`mqtt.domain.com`)"
+      - "traefik.http.routers.mosquitto.rule=Host(`mqtt.pv-mon.phi8.ovh`)"
       - "traefik.http.services.mosquitto.loadbalancer.server.port=1883"
 
   evcc:
@@ -150,7 +164,7 @@ services:
       - /app/entrypoint.sh
     environment:
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - TZ=Europe/Berlin
+      - TZ=Europe/Brussels
     image: andig/evcc:latest
     ipc: private
     logging:
@@ -168,7 +182,7 @@ services:
       - monitoring
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.evcc.rule=Host(`evcc.domain.com`)"
+      - "traefik.http.routers.evcc.rule=Host(`evcc.pv-mon.phi8.ovh`)"
       - "traefik.http.services.evcc.loadbalancer.server.port=7070"
 
 volumes:
