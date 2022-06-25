@@ -16,6 +16,7 @@ services:
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -99,6 +100,7 @@ services:
       - /sys:/rootfs/sys:ro
       - /proc:/rootfs/proc:ro
       - /etc:/rootfs/etc:ro
+      - /dev/ttyUSB0:/dev/ttyUSB0
       - telegraf-logs:/var/log/telegraf
 
     depends_on:
@@ -126,22 +128,22 @@ services:
   #     - "traefik.http.routers.node-red.rule=Host(`node-red.pv-mon.phi8.ovh`)"
   #     - "traefik.http.services.node-red.loadbalancer.server.port=1880"
 
-  sungather:
-    image: michbeck100/sungather:latest
-    container_name: sungather
-    restart: unless-stopped
-    volumes:
-      - ./sungather/config.yaml:/config/config.yaml
-    environment:
-      - TZ=Europe/Brussels
-    ports:
-      - "8082:8082"
-    networks:
-      - monitoring
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sungather.rule=Host(`sungather.pv-mon.phi8.ovh`)"
-      - "traefik.http.services.sungather.loadbalancer.server.port=8082"
+  # sungather:
+  #   image: michbeck100/sungather:latest
+  #   container_name: sungather
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./sungather/config.yaml:/config/config.yaml
+  #   environment:
+  #     - TZ=Europe/Brussels
+  #   ports:
+  #     - "8082:8082"
+  #   networks:
+  #     - monitoring
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.sungather.rule=Host(`sungather.pv-mon.phi8.ovh`)"
+  #     - "traefik.http.services.sungather.loadbalancer.server.port=8082"
 
   mosquitto:
     image: eclipse-mosquitto
