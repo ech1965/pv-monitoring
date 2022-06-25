@@ -99,7 +99,7 @@ services:
       - /sys:/rootfs/sys:ro
       - /proc:/rootfs/proc:ro
       - /etc:/rootfs/etc:ro
-      - /home/tsos/logs/telegraf/:/var/log/telegraf
+      - telegraf-logs:/var/log/telegraf
 
     depends_on:
       - influxdb
@@ -194,6 +194,7 @@ volumes:
   grafana:
   node-red:
   mosquitto-data:
+  telegraf-logs:
 
 networks:
   monitoring:
