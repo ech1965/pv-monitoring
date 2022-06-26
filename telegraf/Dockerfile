@@ -1,7 +1,8 @@
 FROM golang:alpine AS builder
 WORKDIR /build
 COPY ./telegraf-serial ./telegraf-serial
-RUN go build -o telegraf-serial cmd/main.go
+WORKDIR /build/telegraf-serial/cmd 
+RUN go build -o telegraf-serial main.go
 FROM telegraf
 WORKDIR /build
 COPY --from=builder /build/telegraf-serial/telegraf-serial /bin/telegraf-serial
