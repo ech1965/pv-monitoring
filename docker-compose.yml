@@ -86,7 +86,7 @@ services:
       - "traefik.enable=false"
 
   telegraf:
-    image: telegraf
+    build: telegraf
     container_name: telegraf
     restart: unless-stopped
     environment:

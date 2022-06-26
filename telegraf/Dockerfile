@@ -6,4 +6,3 @@ FROM telegraf
 WORKDIR /build
 COPY --from=builder /build/telegraf-serial/telegraf-serial /bin/telegraf-serial
 RUN mkdir -p /etc/telegraf/plugins
-CMD ["./hello"]
