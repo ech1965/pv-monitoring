@@ -87,7 +87,7 @@ services:
 
   telegraf:
     build: telegraf
-    container_name: telegraf
+    container_name: telegraf-serial
     restart: unless-stopped
     environment:
       HOST_PROC: /rootfs/proc
