@@ -7,4 +7,5 @@ WORKDIR /build
 FROM telegraf
 WORKDIR /
 COPY --from=builder /build/telegraf-serial/cmd/telegraf-serial /bin/telegraf-serial
-RUN mkdir -p /etc/telegraf/plugins
+RUN mkdir -p /etc/telegraf/plugins ; touch /etc/telegraf/plugins/serial.conf
+
