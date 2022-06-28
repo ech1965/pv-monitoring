@@ -96,7 +96,7 @@ services:
       TZ: Europe/Brussels
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-      - ./telegraf/seial.conf:/etc/telegraf/plugins/serial.conf
+      - ./telegraf/serial.conf:/etc/telegraf/plugins/serial.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /sys:/rootfs/sys:ro
       - /proc:/rootfs/proc:ro
