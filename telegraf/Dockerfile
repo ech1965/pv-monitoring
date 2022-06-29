@@ -6,6 +6,7 @@ RUN go build -o telegraf-serial main.go
 WORKDIR /build
 FROM telegraf
 WORKDIR /
+RUN apt install musl
 COPY --from=builder /build/telegraf-serial/cmd/telegraf-serial /bin/telegraf-serial
 RUN mkdir -p /etc/telegraf/plugins 
 COPY serial.conf /etc/telegraf/plugins/serial.conf
