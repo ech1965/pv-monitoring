@@ -1,12 +1,14 @@
 package serial
+
 // serial.go
 
 import (
+	"bufio"
 	"time"
+
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
 	"go.bug.st/serial"
-	"bufio"
 )
 
 type Serial struct {
@@ -18,12 +20,14 @@ type Serial struct {
 	DTR	bool	`toml:"dtr"`
 	Log telegraf.Logger	`toml:"-"`
 
+
 	localParity	serial.Parity
 	localStopBits	serial.StopBits
 	isConnected	bool
 	port	serial.Port
 	buf     []byte
-	reader  *bufio.Reader
+	//reader  *bufio.Reader
+	scanner  *bufio.Scanner
 }
 
 
@@ -55,18 +59,19 @@ func (s *Serial) Gather(acc telegraf.Accumulator) error {
 		return nil
 	}
 	
-    line, err := s.reader.ReadString('\n')
+	now := time.Now()
+	for s.scanner.Scan() {
+		fieldsG := map[string]interface{}{
+			"line": s.scanner.Text(),
+		}
+		acc.AddGauge("serial", fieldsG, nil, now)	
+	}
+	
+	err := s.scanner.Err()
 	if err != nil {
 		s.Log.Debugf("Can't read from serial port",err)
 		s.isConnected = false
 	}
-    //s.Log.Debugf("read:(%s)",line)
-	fieldsG := map[string]interface{}{
-		"line": line,
-	}
-	now := time.Now()
-	acc.AddGauge("serial", fieldsG, nil, now)
-
 	return nil
 }
 
@@ -126,7 +131,8 @@ func (s *Serial) connect () error {
 	}
 	port, err := serial.Open(ports[0], mode)
 	s.port = port
-	s.reader = bufio.NewReader(port)
+	//s.reader = bufio.NewReader(port)
+	s.scanner = bufio.NewScanner(port)
 
 	
 	if err != nil {
