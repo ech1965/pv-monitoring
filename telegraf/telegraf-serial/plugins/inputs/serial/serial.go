@@ -2,12 +2,11 @@ package serial
 // serial.go
 
 import (
-	"strconv"
-	"strings"
 	"time"
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
 	"go.bug.st/serial"
+	"bufio"
 )
 
 type Serial struct {
@@ -23,6 +22,8 @@ type Serial struct {
 	localStopBits	serial.StopBits
 	isConnected	bool
 	port	serial.Port
+	buf     []byte
+	reader  *bufio.Reader
 }
 
 
@@ -53,22 +54,15 @@ func (s *Serial) Gather(acc telegraf.Accumulator) error {
 		s.connect()
 		return nil
 	}
-
-	buff := make([]byte, 100)
-	// Reads up to 100 bytes
-	n, err := s.port.Read(buff)
+	
+    line, err := s.reader.ReadString('\n')
 	if err != nil {
 		s.Log.Debugf("Can't read from serial port",err)
 		s.isConnected = false
 	}
-	index := strings.Index(string(buff[:n]),"000");
-	if index != 0 {
-		return nil
-	}
-	temp,_ := strconv.Atoi(string(buff[3:5]))
-
+    //s.Log.Debugf("read:(%s)",line)
 	fieldsG := map[string]interface{}{
-		"temp": temp,
+		"line": line,
 	}
 	now := time.Now()
 	acc.AddGauge("serial", fieldsG, nil, now)
@@ -132,6 +126,9 @@ func (s *Serial) connect () error {
 	}
 	port, err := serial.Open(ports[0], mode)
 	s.port = port
+	s.reader = bufio.NewReader(port)
+
+	
 	if err != nil {
 		s.isConnected = false
 		s.Log.Warnf("I couldn't open the port because: %s ",err.Error())
