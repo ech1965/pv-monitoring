@@ -8,5 +8,6 @@ FROM telegraf
 WORKDIR /
 RUN apt-get update; apt-get install musl
 COPY --from=builder /build/telegraf-serial/cmd/telegraf-serial /bin/telegraf-serial
-RUN mkdir -p /etc/telegraf/plugins ; touch /etc/telegraf/plugins/serial.conf
+RUN mkdir -p /etc/telegraf/plugins 
+COPY ./serial.com /etc/telegraf/plugins/serial.conf
 
