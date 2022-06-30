@@ -5,9 +5,12 @@ package serial
 import (
 	"bufio"
 	"time"
+	//"time"
 
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
+	"github.com/influxdata/telegraf/plugins/parsers"
+	"github.com/influxdata/telegraf/plugins/parsers/influx"
 	"go.bug.st/serial"
 )
 
@@ -26,8 +29,8 @@ type Serial struct {
 	isConnected	bool
 	port	serial.Port
 	buf     []byte
-	//reader  *bufio.Reader
 	scanner  *bufio.Scanner
+	parser   parsers.Parser
 }
 
 
@@ -41,6 +44,11 @@ func (s *Serial) SampleConfig() string {
   ok = true
 `
 }
+func (s *Serial) SetParser(p parsers.Parser) {
+	s.parser = p 
+	s.Log.Debugf("parser set");
+}
+
 
 // Init is for setup, and validating config.
 func (s *Serial) Init() error {
@@ -59,12 +67,16 @@ func (s *Serial) Gather(acc telegraf.Accumulator) error {
 		return nil
 	}
 	
-	now := time.Now()
+	//now := time.Now()
 	for s.scanner.Scan() {
-		fieldsG := map[string]interface{}{
-			"line": s.scanner.Text(),
+		line := s.scanner.Text()
+		metrics, err := s.parser.Parse([]byte(line))
+        if err == nil {
+			for _, m := range metrics {
+				acc.AddMetric(m)	
+			}
+			
 		}
-		acc.AddGauge("serial", fieldsG, nil, now)	
 	}
 	
 	err := s.scanner.Err()
@@ -101,6 +113,10 @@ func (s *Serial) readConfig () error {
 		case s.StopBits == "2":
 			s.localStopBits = serial.TwoStopBits
 	}
+	handler := influx.NewMetricHandler()
+	parser := influx.NewParser(handler)
+	parser.SetTimeFunc(DefaultTime)
+	s.SetParser(parser)
 	return nil
 }
 
@@ -131,7 +147,6 @@ func (s *Serial) connect () error {
 	}
 	port, err := serial.Open(ports[0], mode)
 	s.port = port
-	//s.reader = bufio.NewReader(port)
 	s.scanner = bufio.NewScanner(port)
 
 	
@@ -189,5 +204,8 @@ func init() {
 	inputs.Add("serial", func() telegraf.Input {
 		return &Serial{}
 	})
+}
+var DefaultTime = func() time.Time {
+	return time.Now()
 }
 
