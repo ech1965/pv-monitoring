@@ -104,6 +104,8 @@ services:
       - telegraf-logs:/var/log/telegraf
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
+    group_add:
+      - dialout
     depends_on:
       - influxdb
     networks:
