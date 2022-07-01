@@ -5,22 +5,23 @@ package serial
 import (
 	"bufio"
 	"time"
-	//"time"
 
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
 	"github.com/influxdata/telegraf/plugins/parsers"
 	"github.com/influxdata/telegraf/plugins/parsers/influx"
+
 	"go.bug.st/serial"
 )
 
 type Serial struct {
 	Parity		string	`toml:"parity"`
-	BaudRate  int             `toml:"baudrate"`
-	DataBits	int	`toml:"databits"`
+	BaudRate    int     `toml:"baudrate"`
+	DataBits	int   	`toml:"databits"`
 	StopBits	string	`toml:"stopbits"`
-	RTS	bool	`toml:"rts"`
-	DTR	bool	`toml:"dtr"`
+	RTS			bool	`toml:"rts"`
+	DTR			bool	`toml:"dtr"`
+	Device		string  `toml:"device"`
 	Log telegraf.Logger	`toml:"-"`
 
 
@@ -28,20 +29,23 @@ type Serial struct {
 	localStopBits	serial.StopBits
 	isConnected	bool
 	port	serial.Port
-	buf     []byte
 	scanner  *bufio.Scanner
 	parser   parsers.Parser
 }
 
 
 func (s *Serial) Description() string {
-	return "a serial plugin"
+	return "Read lines from serial port"
 }
 
 func (s *Serial) SampleConfig() string {
 	return `
-  ## Indicate if everything is fine
-  ok = true
+	[[inputs.serial]]
+	baudrate = 115200
+	device = "/dev/ttyUSB0"
+    databits = 8
+	stopbits = "1"
+	parity = "N"
 `
 }
 func (s *Serial) SetParser(p parsers.Parser) {
@@ -67,7 +71,6 @@ func (s *Serial) Gather(acc telegraf.Accumulator) error {
 		return nil
 	}
 	
-	//now := time.Now()
 	for s.scanner.Scan() {
 		line := s.scanner.Text()
 		metrics, err := s.parser.Parse([]byte(line))
@@ -113,8 +116,11 @@ func (s *Serial) readConfig () error {
 		case s.StopBits == "2":
 			s.localStopBits = serial.TwoStopBits
 	}
+	if s.Device == "" {
+		s.Device = "/dev/ttyUSB0"
+	}	
 	handler := influx.NewMetricHandler()
-	parser := influx.NewParser(handler)
+	parser  := influx.NewParser(handler)
 	parser.SetTimeFunc(DefaultTime)
 	s.SetParser(parser)
 	return nil
@@ -133,9 +139,17 @@ func (s *Serial) connect () error {
 		return nil
 	}
 	// Print the list of detected ports
+	found := false
 	for _, port := range ports {
 		s.Log.Infof("Found port %v\n", port)
-
+		if port == s.Device {
+			found = true
+		}
+	}
+	if !found {
+		s.Log.Warnf("Configured serial port not found!=%s",s.Device)
+		s.isConnected = false
+		return nil
 	}
 
 	// Open the first serial port detected at 2400bps O71
@@ -145,7 +159,7 @@ func (s *Serial) connect () error {
 		DataBits: s.DataBits,
 		StopBits: s.localStopBits,
 	}
-	port, err := serial.Open(ports[0], mode)
+	port, err := serial.Open(s.Device, mode)
 	s.port = port
 	s.scanner = bufio.NewScanner(port)
 
