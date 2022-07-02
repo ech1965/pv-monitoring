@@ -65,7 +65,7 @@ exports:
         register: monthly_power_yields  
       - point: "history"
         register: daily_power_yields
-      - point: "histrory"
+      - point: "history"
         register: timestamp
       - point: "temp"
         register: internal_temperature
