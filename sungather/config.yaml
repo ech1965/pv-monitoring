@@ -33,26 +33,40 @@ exports:
 
   # Output data to InfluxDB
   - name: influxdb
-    enabled: False                          # [Optional] Default is False
-    url: "http://influxdb:8086"             # [Optional] Default URL is http://localhost:8086
-    # token: "xxx"                          # [Required] API Token OR Username:Password (for influxdb v1.8x comment it out and use username + password)
-    # username:                             # [Optional] Username if not using token
-    # password:                             # [Optional] Password if not using token
-    org: "Default"                          # [Required] InfluxDB Organization (for influxdb v1.8x this will be ignored)
-    bucket: "monitoring"                    # [Required] InfluxDB Bucket (for influxdb v1.8x this is the database name)
+    enabled: True                           # [Optional] Default is False
+    url: "http://172.19.1.21:8086"
+    token: "MsHieEQNuDHvxswBn917ZkQKNCBbCzJ00IJRhRrHsBmQTC7CEa0hdZ_w1lF3he8qmY4p2A4IR-h5-XoxY0KFKg=="
+    org: "phi8"
+    bucket: "SUNGROW"
     measurements:                           # [Required] Registers to publish to bucket
-      - point: "power"
-        register: daily_power_yields
       - point: "power"
         register: total_active_power
       - point: "power"
-        register: load_power
+        register: total_reactive_power
       - point: "power"
-        register: meter_power
+        register: power_factor    
       - point: "power"
-        register: export_to_grid
+        register: phase_a_voltage
       - point: "power"
-        register: import_from_grid
+        register: phase_a_current
+      - point: "power"
+        register: mppt_1_voltage
+      - point: "power"
+        register: mppt_1_current
+      - point: "power"
+        register: mppt_2_voltage
+      - point: "power"
+        register: mppt_2_current
+      - point: "power"
+        register: grid_frequency
+      - point: "history"
+        register: total_power_yields
+      - point: "history"
+        register: monthly_power_yields  
+      - point: "history"
+        register: daily_power_yields
+      - point: "histrory"
+        register: timestamp
       - point: "temp"
         register: internal_temperature
 
@@ -93,8 +107,6 @@ exports:
         payload_on: "ON"
         payload_off: "OFF"
     topics:
-      - topic: solar/power/load_power_hybrid
-        register: load_power_hybrid
       - topic: solar/power/total_dc_power
         register: total_dc_power
       - topic: solar/power/current/phase_a
