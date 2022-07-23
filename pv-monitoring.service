@@ -8,6 +8,7 @@ Type=oneshot
 User=tsos
 Group=tsos
 WorkingDirectory=/home/tsos/pv-monitoring
+EnvironmentFile=-/etc/pv-monitoring.env
 ExecStart=/usr/bin/env /usr/bin/docker-compose -f /home/tsos/pv-monitoring/docker-compose.yml up -d
 ExecStop=/usr/bin/env /usr/bin/docker-compose -f /home/tsos/pv-monitoring/docker-compose.yml stop
 StandardOutput=syslog

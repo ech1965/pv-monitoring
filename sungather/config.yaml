@@ -4,7 +4,7 @@ inverter:
   timeout: 5                              # [Optional] Default is 10, how long to wait for a connection
   retries: 3                              # [Optional] Default is 3, how many times to retry if connection fails
   slave: 0x01                             # [Optional] Default is 0x01
-  scan_interval: 10                       # [Optional] Default is 30
+  scan_interval: 5                        # [Optional] Default is 30
   connection: http                        # [Required] options: modbus, sungrow, http
   # model: "SH10RT"                       # [Optional] This is autodetected on startup, only needed if detection issues or for testing
                                           # See model list here: https://github.com/bohdan-s/SunGather#supported
@@ -23,7 +23,7 @@ inverter:
 exports:
   # Print Registers to console, good for debugging / troubleshooting
   - name: console         
-    enabled: False                          # [Optional] Default is False
+    enabled: True                           # [Optional] Default is False
 
   # Runs a simple Webserver showing Config and last read registers
   # Access at http://localhost:8080 or http://[serverip]:8080
@@ -65,8 +65,6 @@ exports:
         register: monthly_power_yields  
       - point: "history"
         register: daily_power_yields
-      - point: "history"
-        register: timestamp
       - point: "temp"
         register: internal_temperature
 
